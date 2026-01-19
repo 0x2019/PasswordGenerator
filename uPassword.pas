@@ -32,7 +32,7 @@ function GeneratePassword(const Opt: TPasswordOptions; out Password, ErrorMsg: s
 implementation
 
 uses
-  uMain.UI.Messages;
+  uMain.UI.Messages, uMain.UI.Strings;
 
 var
   BCryptStatus: NTSTATUS = 0;

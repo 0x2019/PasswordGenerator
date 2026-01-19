@@ -14,7 +14,8 @@ procedure UI_Exit(AForm: TObject);
 implementation
 
 uses
-  uMain, uMain.UI.Menu, uMain.UI.Messages, uMain.UI.Settings, uPassword;
+  uMain, uMain.UI.Menu, uMain.UI.Messages, uMain.UI.Settings, uMain.UI.Strings,
+  uPassword;
 
 procedure UI_Init(AForm: TObject);
 var

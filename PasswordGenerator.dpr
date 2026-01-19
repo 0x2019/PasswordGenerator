@@ -8,7 +8,8 @@ uses
   uMain.UI.Messages in 'uMain.UI.Messages.pas',
   uMain.UI in 'uMain.UI.pas',
   uMain.UI.Menu in 'uMain.UI.Menu.pas',
-  uPassword in 'uPassword.pas';
+  uPassword in 'uPassword.pas',
+  uMain.UI.Strings in 'uMain.UI.Strings.pas';
 
 var
   uMutex: THandle;

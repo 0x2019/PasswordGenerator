@@ -24,7 +24,7 @@ procedure UI_ShowAbout(AForm: TObject);
 implementation
 
 uses
-  uMain, uMain.UI.Messages;
+  uMain, uMain.UI.Messages, uMain.UI.Strings;
 
 procedure UI_UpdateMenu(AForm: TObject);
 var
