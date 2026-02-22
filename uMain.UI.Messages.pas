@@ -3,7 +3,7 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, Vcl.Forms;
+  Winapi.Windows, Winapi.Messages, Vcl.Forms;
 
 procedure UI_ChangeMessageBoxPosition(AForm: TObject);
 
@@ -24,8 +24,9 @@ var
 procedure UI_ChangeMessageBoxPosition(AForm: TObject);
 var
   F: TfrmMain;
-  mbHWND: LongWord;
+  mbHWND: HWND;
   mbRect: TRect;
+  mbStyle: NativeInt;
   x, y, w, h: Integer;
 begin
   if not (AForm is TfrmMain) then Exit;
@@ -33,6 +34,11 @@ begin
 
   mbHWND := FindWindow(MAKEINTRESOURCE(WC_DIALOG), xMsgCaption);
   if (mbHWND <> 0) then begin
+    mbStyle := GetWindowLongPtr(mbHWND, GWL_STYLE);
+    if (mbStyle and WS_SYSMENU) <> 0 then begin
+      SetWindowLongPtr(mbHWND, GWL_STYLE, mbStyle and (not WS_SYSMENU));
+      SetWindowPos(mbHWND, 0, 0, 0, 0, 0, SWP_FRAMECHANGED or SWP_NOMOVE or SWP_NOSIZE or SWP_NOZORDER or SWP_NOACTIVATE);
+    end;
     GetWindowRect(mbHWND, mbRect);
     with mbRect do begin
       w := Right - Left;
