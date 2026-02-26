@@ -3,7 +3,7 @@
 interface
 
 uses
-  Winapi.Windows, System.SysUtils, Clipbrd;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, Clipbrd;
 
 procedure UI_Init(AForm: TObject);
 
@@ -56,7 +56,10 @@ begin
     Exit;
   end;
 
-  F.redResult.Text := F.edtPrefix.Text + Pwd + F.edtSuffix.Text;
+  F.mmoResult.Text := F.edtPrefix.Text + Pwd + F.edtSuffix.Text;
+
+  SendMessage(F.mmoResult.Handle, EM_SETWORDBREAKPROC, 0, LPARAM(@PasswordCharWrapProc));
+
   UI_UpdateMenu(F);
 end;
 
@@ -67,10 +70,10 @@ begin
   if not (AForm is TfrmMain) then Exit;
   F := TfrmMain(AForm);
 
-  if F.redResult.Text = '' then Exit;
+  if F.mmoResult.Text = '' then Exit;
 
   try
-    Clipboard.AsText := F.redResult.Text;
+    Clipboard.AsText := F.mmoResult.Text;
   except
     on E: Exception do
       UI_MessageBox(F, Format(SClipboardCopyErrMsg, [E.Message]), MB_ICONWARNING or MB_OK);

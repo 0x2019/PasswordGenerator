@@ -292,7 +292,7 @@ object frmMain: TfrmMain
       Value = 45
     end
   end
-  object sGroupBox1: TsGroupBox
+  object grpAffixes: TsGroupBox
     Left = 1
     Top = 175
     Width = 178
@@ -331,12 +331,11 @@ object frmMain: TfrmMain
       TabOrder = 1
     end
   end
-  object redResult: TsRichEdit
+  object mmoResult: TsMemo
     Left = 185
     Top = 8
     Width = 416
     Height = 241
-    Color = 15195590
     ParentShowHint = False
     ReadOnly = True
     ScrollBars = ssVertical

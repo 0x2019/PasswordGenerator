@@ -29,6 +29,8 @@ type
 function BCryptGenRandom(hAlgorithm: THandle; pbBuffer: PByte; cbBuffer: Cardinal; dwFlags: Cardinal): NTSTATUS; stdcall; external 'bcrypt.dll';
 function GeneratePassword(const Opt: TPasswordOptions; out Password, ErrorMsg: string): Boolean;
 
+function PasswordCharWrapProc(lpch: PChar; ichCurrent: Integer; cch: Integer; code: Integer): Integer; stdcall;
+
 implementation
 
 uses
@@ -170,6 +172,11 @@ begin
       Result := False;
     end;
   end;
+end;
+
+function PasswordCharWrapProc(lpch: PChar; ichCurrent: Integer; cch: Integer; code: Integer): Integer; stdcall;
+begin
+  Result := 0;
 end;
 
 end.

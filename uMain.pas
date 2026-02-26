@@ -1,4 +1,4 @@
-﻿unit uMain;
+unit uMain;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.Classes, System.ImageList, Vcl.Buttons,
   Vcl.Controls, Vcl.Forms, Vcl.ImgList, Vcl.Menus, sSkinProvider, sSkinManager,
   acAlphaHints, Vcl.StdCtrls, sBitBtn, sMemo, sEdit, sSpinEdit, sLabel, sCheckBox,
-  sGroupBox, acAlphaImageList, Vcl.Dialogs, sDialogs, Vcl.ComCtrls, sRichEdit;
+  sGroupBox, acAlphaImageList, Vcl.Dialogs, sDialogs, Vcl.ComCtrls;
 
 const
   mbMessage = WM_USER + 1024;
@@ -32,7 +32,7 @@ type
     chkSpecialChars: TsCheckBox;
     grpLength: TsGroupBox;
     lblLength: TsLabel;
-    sGroupBox1: TsGroupBox;
+    grpAffixes: TsGroupBox;
     lblPrefix: TsLabel;
     edtPrefix: TsEdit;
     edtSuffix: TsEdit;
@@ -45,7 +45,7 @@ type
     mmuExit: TMenuItem;
     sSaveDlg: TsSaveDialog;
     edtLength: TsSpinEdit;
-    redResult: TsRichEdit;
+    mmoResult: TsMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure mmuAboutClick(Sender: TObject);

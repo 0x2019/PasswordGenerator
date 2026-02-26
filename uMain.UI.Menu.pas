@@ -33,8 +33,8 @@ begin
   if not (AForm is TfrmMain) then Exit;
   F := TfrmMain(AForm);
 
-  if Assigned(F.mmuSaveAs) and Assigned(F.redResult) then
-    F.mmuSaveAs.Enabled := F.redResult.Text <> '';
+  if Assigned(F.mmuSaveAs) and Assigned(F.mmoResult) then
+    F.mmuSaveAs.Enabled := F.mmoResult.Text <> '';
 
   if Assigned(F.mmuClearClipboard) then
     F.mmuClearClipboard.Enabled := IsClipboardFormatAvailable(CF_UNICODETEXT) or
@@ -53,7 +53,7 @@ begin
   if not (AForm is TfrmMain) then Exit;
   F := TfrmMain(AForm);
 
-  if F.redResult.Text = '' then Exit;
+  if F.mmoResult.Text = '' then Exit;
   if not Assigned(F.sSaveDlg) then Exit;
 
   F.sSaveDlg.FileName := Format('PG_%s.txt', [FormatDateTime('yyyymmdd_hhnnss', Now)]);
@@ -67,7 +67,7 @@ begin
   Enc := TUTF8Encoding.Create(False);
   try
     try
-      TFile.WriteAllText(FileName, F.redResult.Lines.Text, Enc);
+      TFile.WriteAllText(FileName, F.mmoResult.Lines.Text, Enc);
     except
       on E: Exception do
       begin
