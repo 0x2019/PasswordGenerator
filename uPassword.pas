@@ -3,21 +3,21 @@
 interface
 
 uses
-  System.SysUtils, Winapi.Windows;
+  Winapi.Windows, System.SysUtils;
 
 const
   BCRYPT_USE_SYSTEM_PREFERRED_RNG = $00000002;
 
-  Digits            = '0123456789';
-  LowerCase         = 'abcdefghijklmnopqrstuvwxyz';
-  UpperCase         =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  SpecialChars      = '!@#$%^&*()_+|\=-<>.,/?'';:"][}{';
+  Digits = '0123456789';
+  LowerCase = 'abcdefghijklmnopqrstuvwxyz';
+  UpperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  SpecialChars = '!@#$%^&*()_+|\=-<>.,/?'';:"][}{';
 
 type
   NTSTATUS = LongInt;
 
-  TPasswordCharGroup      = (pcgDigits, pcgLowercase, pcgUppercase, pcgSpecialChars);
-  TPasswordCharGroupSet   = set of TPasswordCharGroup;
+  TPasswordCharGroup = (pcgDigits, pcgLowercase, pcgUppercase, pcgSpecialChars);
+  TPasswordCharGroupSet = set of TPasswordCharGroup;
 
   TPasswordOptions = record
     Len: Integer;

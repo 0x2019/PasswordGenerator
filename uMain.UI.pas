@@ -24,7 +24,7 @@ begin
   if not (AForm is TfrmMain) then Exit;
   F := TfrmMain(AForm);
 
-  F.Constraints.MinWidth  := F.Width;
+  F.Constraints.MinWidth := F.Width;
   F.Constraints.MinHeight := F.Height;
 
   UI_LoadSettings(F);

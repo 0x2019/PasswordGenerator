@@ -43,7 +43,7 @@ begin
 
     F.chkDigits.Checked := xIni.ReadBool('Main', 'Digits', F.chkDigits.Checked);
     F.chkLowerCase.Checked := xIni.ReadBool('Main', 'LowerCase', F.chkLowerCase.Checked);
-    F.chkUpperCase.Checked := xIni.ReadBool('Main', 'UpperCase',  F.chkUpperCase.Checked);
+    F.chkUpperCase.Checked := xIni.ReadBool('Main', 'UpperCase', F.chkUpperCase.Checked);
     F.chkSpecialChars.Checked := xIni.ReadBool('Main', 'SpecialChars', F.chkSpecialChars.Checked);
 
     F.edtLength.Value := xIni.ReadInteger('Main', 'Length', F.edtLength.Value);

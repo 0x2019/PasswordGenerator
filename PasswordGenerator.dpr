@@ -19,7 +19,7 @@ var
 
 begin
   uMutex := CreateMutex(nil, True, 'PG!');
-  if (uMutex <> 0 ) and (GetLastError = 0) then begin
+  if (uMutex <> 0) and (GetLastError = 0) then begin
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

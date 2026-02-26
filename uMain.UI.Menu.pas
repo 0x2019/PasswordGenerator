@@ -38,9 +38,9 @@ begin
 
   if Assigned(F.mmuClearClipboard) then
     F.mmuClearClipboard.Enabled := IsClipboardFormatAvailable(CF_UNICODETEXT) or
-                                   IsClipboardFormatAvailable(CF_TEXT)        or
-                                   IsClipboardFormatAvailable(CF_BITMAP)      or
-                                   IsClipboardFormatAvailable(CF_DIB)         or
+                                   IsClipboardFormatAvailable(CF_TEXT) or
+                                   IsClipboardFormatAvailable(CF_BITMAP) or
+                                   IsClipboardFormatAvailable(CF_DIB) or
                                    IsClipboardFormatAvailable(CF_HDROP);
 end;
 
