@@ -1,15 +1,14 @@
-unit uMain;
+﻿unit uMain;
 
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.Classes, System.ImageList, Vcl.Buttons,
-  Vcl.Controls, Vcl.Forms, Vcl.ImgList, Vcl.Menus, sSkinProvider, sSkinManager,
+  Winapi.Windows, Winapi.Messages, System.Classes, System.SysUtils, System.ImageList,
+  Vcl.Buttons, Vcl.Controls, Vcl.Forms, Vcl.ImgList, Vcl.Menus, sSkinProvider, sSkinManager,
   acAlphaHints, Vcl.StdCtrls, sBitBtn, sMemo, sEdit, sSpinEdit, sLabel, sCheckBox,
-  sGroupBox, acAlphaImageList, Vcl.Dialogs, sDialogs, Vcl.ComCtrls;
+  sGroupBox, acAlphaImageList, Vcl.Dialogs, sDialogs, Vcl.ComCtrls,
 
-const
-  mbMessage = WM_USER + 1024;
+  uForms, uMessageBox, uSettings;
 
 type
   TfrmMain = class(TForm)
@@ -21,7 +20,7 @@ type
     mmuView: TMenuItem;
     mmuTool: TMenuItem;
     mmuHelp: TMenuItem;
-    mmuAbout: TMenuItem;
+    miAbout: TMenuItem;
     btnGenerate: TsBitBtn;
     btnCopy: TsBitBtn;
     btnExit: TsBitBtn;
@@ -37,31 +36,30 @@ type
     edtPrefix: TsEdit;
     edtSuffix: TsEdit;
     lblSuffix: TsLabel;
-    mmuClearClipboard: TMenuItem;
-    mmuAlwaysOnTop: TMenuItem;
+    miClearClipboard: TMenuItem;
+    miAlwaysOnTop: TMenuItem;
     sCharImageList: TsCharImageList;
     sCharImageList_Small: TsCharImageList;
-    mmuSaveAs: TMenuItem;
-    mmuExit: TMenuItem;
+    miSaveAs: TMenuItem;
+    miExit: TMenuItem;
     sSaveDlg: TsSaveDialog;
     edtLength: TsSpinEdit;
     mmoResult: TsMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure mmuAboutClick(Sender: TObject);
-    procedure mmuClearClipboardClick(Sender: TObject);
+    procedure miAboutClick(Sender: TObject);
+    procedure miClearClipboardClick(Sender: TObject);
     procedure btnGenerateClick(Sender: TObject);
     procedure btnExitClick(Sender: TObject);
     procedure btnCopyClick(Sender: TObject);
-    procedure mmuAlwaysOnTopClick(Sender: TObject);
-    procedure mmuSaveAsClick(Sender: TObject);
+    procedure miAlwaysOnTopClick(Sender: TObject);
+    procedure miSaveAsClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    procedure ChangeMessageBoxPosition(var Msg: TMessage); message mbMessage;
     procedure WMClipboardUpdate(var Msg: TMessage); message WM_CLIPBOARDUPDATE;
-    procedure WMNCHitTest(var Msg: TWMNCHitTest); message WM_NCHITTEST;
   public
-    FAlwaysOnTop: Boolean;
+    procedure ChangeMessageBoxPosition(var Msg: TMessage); message mbMessage;
+    procedure DragForm(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   end;
 
 var
@@ -72,7 +70,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uMain.UI, uMain.UI.Menu, uMain.UI.Messages, uMain.UI.Settings;
+  uAppController, uAppMenu, uAppSettings, uAppStrings;
 
 procedure TfrmMain.ChangeMessageBoxPosition(var Msg: TMessage);
 begin
@@ -81,40 +79,53 @@ end;
 
 procedure TfrmMain.WMClipboardUpdate(var Msg: TMessage);
 begin
-  UI_UpdateMenu(Self);
+  AppMenu_Update(Self);
 end;
 
-procedure TfrmMain.WMNCHitTest(var Msg: TWMNCHitTest);
+procedure TfrmMain.DragForm(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  inherited;
-  if Msg.Result = htClient then Msg.Result := htCaption;
+  UI_DragForm(Self, Button);
 end;
 
 procedure TfrmMain.btnCopyClick(Sender: TObject);
 begin
-  UI_Copy(Self);
+  App_Copy(Self);
 end;
 
 procedure TfrmMain.btnExitClick(Sender: TObject);
 begin
-  UI_Exit(Self);
+  Close;
 end;
 
 procedure TfrmMain.btnGenerateClick(Sender: TObject);
 begin
-  UI_Generate(Self);
+  App_Generate(Self);
 end;
 
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   RemoveClipboardFormatListener(Handle);
-  UI_SaveSettings(Self);
+  UI_SaveFormSettings(Self);
+
+  AppSettings_Save(Self);
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  UI_Init(Self);
+  UI_SetMinConstraints(Self);
+  UI_LoadFormSettings(Self);
+
+  grpchar.OnMouseDown := DragForm;
+  grpLength.OnMouseDown := DragForm;
+  grpAffixes.OnMouseDown := DragForm;
+  Self.OnMouseDown := DragForm;
+
+  AppSettings_Load(Self);
+  UI_SetAlwaysOnTop(Self, miAlwaysOnTop.Checked);
+
+  AppMenu_Update(Self);
   AddClipboardFormatListener(Handle);
+
   btnGenerate.Click;
 end;
 
@@ -122,27 +133,28 @@ procedure TfrmMain.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_ESCAPE then
-    UI_Exit(Self);
+    Close;
 end;
 
-procedure TfrmMain.mmuAboutClick(Sender: TObject);
+procedure TfrmMain.miAboutClick(Sender: TObject);
 begin
-  UI_ShowAbout(Self);
+  UI_MessageBox(Self, Format(SAboutMsg, [APP_NAME, APP_VERSION, APP_RELEASE, APP_URL]), MB_ICONQUESTION or MB_OK);
 end;
 
-procedure TfrmMain.mmuAlwaysOnTopClick(Sender: TObject);
+procedure TfrmMain.miAlwaysOnTopClick(Sender: TObject);
 begin
-  UI_AlwaysOnTop(Self);
+  miAlwaysOnTop.Checked := not miAlwaysOnTop.Checked;
+  UI_SetAlwaysOnTop(Self, miAlwaysOnTop.Checked);
 end;
 
-procedure TfrmMain.mmuClearClipboardClick(Sender: TObject);
+procedure TfrmMain.miClearClipboardClick(Sender: TObject);
 begin
-  UI_ClearClipboard(Self);
+  AppMenu_ClearClipboard(Self);
 end;
 
-procedure TfrmMain.mmuSaveAsClick(Sender: TObject);
+procedure TfrmMain.miSaveAsClick(Sender: TObject);
 begin
-  UI_SaveAs(Self);
+  AppMenu_SaveAs(Self);
 end;
 
 end.

@@ -1,4 +1,4 @@
-﻿unit uMain.UI.Strings;
+﻿unit uAppStrings;
 
 interface
 
@@ -9,7 +9,7 @@ resourcestring
   APP_URL                             = 'https://github.com/0x2019/PasswordGenerator';
 
   SFileSavedMsg                       = 'File successfully saved!' + sLineBreak + 'Path: %s';
-  SFileSaveErrMsg                     = 'Failed to save the file.' + sLineBreak + 'Path: %s' + sLineBreak + '%s';
+  SFileSaveFailMsg                    = 'Failed to save the file.' + sLineBreak + 'Path: %s' + sLineBreak + '%s';
 
   SOpenFileMsg                        = 'Would you like to open the file now?';
   SOpenFileFailMsg                    = 'Failed to open the file.';

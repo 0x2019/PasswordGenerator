@@ -34,7 +34,8 @@ function PasswordCharWrapProc(lpch: PChar; ichCurrent: Integer; cch: Integer; co
 implementation
 
 uses
-  uMain.UI.Messages, uMain.UI.Strings;
+  uAppStrings,
+  uMessageBox;
 
 var
   BCryptStatus: NTSTATUS = 0;

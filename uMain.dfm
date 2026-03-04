@@ -4131,14 +4131,14 @@ object frmMain: TfrmMain
     object mmuFile: TMenuItem
       Caption = '&File'
       SubMenuImages = sCharImageList_Small
-      object mmuSaveAs: TMenuItem
+      object miSaveAs: TMenuItem
         Caption = '&Save As...'
         SubMenuImages = sCharImageList_Small
         ImageIndex = 0
         ShortCut = 16467
-        OnClick = mmuSaveAsClick
+        OnClick = miSaveAsClick
       end
-      object mmuExit: TMenuItem
+      object miExit: TMenuItem
         Caption = 'E&xit'
         ImageIndex = 1
         OnClick = btnExitClick
@@ -4146,29 +4146,29 @@ object frmMain: TfrmMain
     end
     object mmuView: TMenuItem
       Caption = '&View'
-      object mmuAlwaysOnTop: TMenuItem
+      object miAlwaysOnTop: TMenuItem
         Caption = '&Always On Top'
-        OnClick = mmuAlwaysOnTopClick
+        OnClick = miAlwaysOnTopClick
       end
     end
     object mmuTool: TMenuItem
       Caption = '&Tool'
       SubMenuImages = sCharImageList_Small
-      object mmuClearClipboard: TMenuItem
+      object miClearClipboard: TMenuItem
         Caption = '&Clear Clipboard'
         SubMenuImages = sCharImageList_Small
         ImageIndex = 2
-        OnClick = mmuClearClipboardClick
+        OnClick = miClearClipboardClick
       end
     end
     object mmuHelp: TMenuItem
       Caption = '&Help'
       SubMenuImages = sCharImageList_Small
-      object mmuAbout: TMenuItem
+      object miAbout: TMenuItem
         Caption = '&About'
         SubMenuImages = sCharImageList_Small
         ImageIndex = 3
-        OnClick = mmuAboutClick
+        OnClick = miAboutClick
       end
     end
   end
