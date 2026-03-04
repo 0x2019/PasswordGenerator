@@ -8,6 +8,7 @@ uses
 
 procedure AppController_Generate(AForm: TfrmMain);
 procedure AppController_Copy(AForm: TfrmMain);
+procedure AppController_Exit(AForm: TfrmMain);
 
 implementation
 
@@ -53,6 +54,12 @@ begin
         UI_MessageBox(AForm, Format(SClipboardCopyErrMsg, [E.Message]), MB_ICONERROR or MB_OK);
     end;
   end;
+end;
+
+procedure AppController_Exit(AForm: TfrmMain);
+begin
+  if AForm = nil then Exit;
+  AForm.Close;
 end;
 
 end.

@@ -94,7 +94,7 @@ end;
 
 procedure TfrmMain.btnExitClick(Sender: TObject);
 begin
-  Close;
+  AppController_Exit(Self);
 end;
 
 procedure TfrmMain.btnGenerateClick(Sender: TObject);
@@ -133,18 +133,17 @@ procedure TfrmMain.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_ESCAPE then
-    Close;
+    AppController_Exit(Self);
 end;
 
 procedure TfrmMain.miAboutClick(Sender: TObject);
 begin
-  UI_MessageBox(Self, Format(SAboutMsg, [APP_NAME, APP_VERSION, APP_RELEASE, APP_URL]), MB_ICONQUESTION or MB_OK);
+  AppMenu_About(Self);
 end;
 
 procedure TfrmMain.miAlwaysOnTopClick(Sender: TObject);
 begin
-  miAlwaysOnTop.Checked := not miAlwaysOnTop.Checked;
-  UI_SetAlwaysOnTop(Self, miAlwaysOnTop.Checked);
+  AppMenu_AlwaysOnTop(Self);
 end;
 
 procedure TfrmMain.miClearClipboardClick(Sender: TObject);

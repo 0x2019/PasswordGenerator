@@ -6,14 +6,25 @@ uses
   Winapi.Windows, System.SysUtils, System.Classes, System.IOUtils, Vcl.Forms,
   Vcl.Menus, ShellAPI, Clipbrd, uMain;
 
+// Global
 procedure AppMenu_Update(AForm: TfrmMain);
+
+// File
 procedure AppMenu_SaveAs(AForm: TfrmMain);
+
+// View
+procedure AppMenu_AlwaysOnTop(AForm: TfrmMain);
+
+// Tool
 procedure AppMenu_ClearClipboard(AForm: TfrmMain);
+
+// Help
+procedure AppMenu_About(AForm: TfrmMain);
 
 implementation
 
 uses
-  uMenu, uMessageBox,
+  uForms, uMenu, uMessageBox,
   uAppStrings;
 
 procedure AppMenu_Update(AForm: TfrmMain);
@@ -24,18 +35,6 @@ begin
     AForm.miSaveAs.Enabled := AForm.mmoResult.Text <> '';
 
   UI_Menu_UpdateClipboard(AForm.miClearClipboard);
-end;
-
-procedure AppMenu_ClearClipboard(AForm: TfrmMain);
-begin
-  if AForm = nil then Exit;
-  try
-    Clipboard.Clear;
-  except
-    on E: Exception do
-      UI_MessageBox(AForm, Format(SClipboardClearErrMsg, [E.Message]), MB_ICONWARNING or MB_OK);
-  end;
-  AppMenu_Update(AForm);
 end;
 
 procedure AppMenu_SaveAs(AForm: TfrmMain);
@@ -75,6 +74,31 @@ begin
     if ShellExecute(0, 'open', PChar(FileName), nil, nil, SW_SHOWNORMAL) <= 32 then
       UI_MessageBox(AForm, SOpenFileFailMsg, MB_ICONWARNING or MB_OK);
   end;
+end;
+
+procedure AppMenu_AlwaysOnTop(AForm: TfrmMain);
+begin
+  if AForm = nil then Exit;
+  AForm.miAlwaysOnTop.Checked := not AForm.miAlwaysOnTop.Checked;
+  UI_SetAlwaysOnTop(AForm, AForm.miAlwaysOnTop.Checked);
+end;
+
+procedure AppMenu_ClearClipboard(AForm: TfrmMain);
+begin
+  if AForm = nil then Exit;
+  try
+    Clipboard.Clear;
+  except
+    on E: Exception do
+      UI_MessageBox(AForm, Format(SClipboardClearErrMsg, [E.Message]), MB_ICONWARNING or MB_OK);
+  end;
+  AppMenu_Update(AForm);
+end;
+
+procedure AppMenu_About(AForm: TfrmMain);
+begin
+  if AForm = nil then Exit;
+  UI_MessageBox(AForm, Format(SAboutMsg, [APP_NAME, APP_VERSION, APP_RELEASE, APP_URL]), MB_ICONQUESTION or MB_OK);
 end;
 
 end.
