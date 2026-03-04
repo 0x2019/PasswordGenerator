@@ -4,76 +4,65 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, System.IOUtils, Vcl.Forms,
-  Vcl.Menus, ShellAPI, Clipbrd;
+  Vcl.Menus, ShellAPI, Clipbrd, uMain;
 
-procedure AppMenu_Update(AForm: TObject);
-procedure AppMenu_SaveAs(AForm: TObject);
-
-procedure AppMenu_ClearClipboard(AForm: TObject);
+procedure AppMenu_Update(AForm: TfrmMain);
+procedure AppMenu_SaveAs(AForm: TfrmMain);
+procedure AppMenu_ClearClipboard(AForm: TfrmMain);
 
 implementation
 
 uses
-  uAppStrings, uMain,
-  uMenu, uMessageBox;
+  uMenu, uMessageBox,
+  uAppStrings;
 
-procedure AppMenu_Update(AForm: TObject);
-var
-  F: TfrmMain;
+procedure AppMenu_Update(AForm: TfrmMain);
 begin
-  if not (AForm is TfrmMain) then Exit;
-  F := TfrmMain(AForm);
+  if AForm = nil then Exit;
 
-  if Assigned(F.miSaveAs) and Assigned(F.mmoResult) then
-    F.miSaveAs.Enabled := F.mmoResult.Text <> '';
+  if Assigned(AForm.miSaveAs) and Assigned(AForm.mmoResult) then
+    AForm.miSaveAs.Enabled := AForm.mmoResult.Text <> '';
 
-  UI_Menu_UpdateClipboard(F.miClearClipboard);
+  UI_Menu_UpdateClipboard(AForm.miClearClipboard);
 end;
 
-procedure AppMenu_ClearClipboard(AForm: TObject);
-var
-  F: TfrmMain;
+procedure AppMenu_ClearClipboard(AForm: TfrmMain);
 begin
-  if not (AForm is TfrmMain) then Exit;
-  F := TfrmMain(AForm);
-
+  if AForm = nil then Exit;
   try
     Clipboard.Clear;
   except
     on E: Exception do
-      UI_MessageBox(F, Format(SClipboardClearErrMsg, [E.Message]), MB_ICONWARNING or MB_OK);
+      UI_MessageBox(AForm, Format(SClipboardClearErrMsg, [E.Message]), MB_ICONWARNING or MB_OK);
   end;
-  AppMenu_Update(F);
+  AppMenu_Update(AForm);
 end;
 
-procedure AppMenu_SaveAs(AForm: TObject);
+procedure AppMenu_SaveAs(AForm: TfrmMain);
 var
-  F: TfrmMain;
   FileName: string;
   Enc: TEncoding;
 begin
-  if not (AForm is TfrmMain) then Exit;
-  F := TfrmMain(AForm);
+  if AForm = nil then Exit;
+  if AForm.mmoResult.Text = '' then Exit;
+  if not Assigned(AForm.sSaveDlg) then Exit;
 
-  if F.mmoResult.Text = '' then Exit;
-  if not Assigned(F.sSaveDlg) then Exit;
+  AForm.sSaveDlg.FileName := Format('PG_%s.txt', [FormatDateTime('yyyymmdd_hhnnss', Now)]);
 
-  F.sSaveDlg.FileName := Format('PG_%s.txt', [FormatDateTime('yyyymmdd_hhnnss', Now)]);
+  if not AForm.sSaveDlg.Execute then Exit;
 
-  if not F.sSaveDlg.Execute then Exit;
-
-  FileName := F.sSaveDlg.FileName;
+  FileName := AForm.sSaveDlg.FileName;
   if ExtractFileExt(FileName) = '' then
     FileName := FileName + '.txt';
 
   Enc := TUTF8Encoding.Create(False);
   try
     try
-      TFile.WriteAllText(FileName, F.mmoResult.Lines.Text, Enc);
+      TFile.WriteAllText(FileName, AForm.mmoResult.Lines.Text, Enc);
     except
       on E: Exception do
       begin
-        UI_MessageBox(F, Format(SFileSaveFailMsg, [FileName, E.Message]), MB_ICONERROR or MB_OK);
+        UI_MessageBox(AForm, Format(SFileSaveFailMsg, [FileName, E.Message]), MB_ICONERROR or MB_OK);
         Exit;
       end;
     end;
@@ -81,10 +70,10 @@ begin
     Enc.Free;
   end;
 
-  if UI_ConfirmYesNo(F, Format(SFileSavedMsg, [FileName]) + sLineBreak + sLineBreak + SOpenFileMsg) then
+  if UI_ConfirmYesNo(AForm, Format(SFileSavedMsg, [FileName]) + sLineBreak + sLineBreak + SOpenFileMsg) then
   begin
     if ShellExecute(0, 'open', PChar(FileName), nil, nil, SW_SHOWNORMAL) <= 32 then
-      UI_MessageBox(F, SOpenFileFailMsg, MB_ICONWARNING or MB_OK);
+      UI_MessageBox(AForm, SOpenFileFailMsg, MB_ICONWARNING or MB_OK);
   end;
 end;
 

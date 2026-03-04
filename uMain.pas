@@ -89,7 +89,7 @@ end;
 
 procedure TfrmMain.btnCopyClick(Sender: TObject);
 begin
-  App_Copy(Self);
+  AppController_Copy(Self);
 end;
 
 procedure TfrmMain.btnExitClick(Sender: TObject);
@@ -99,7 +99,7 @@ end;
 
 procedure TfrmMain.btnGenerateClick(Sender: TObject);
 begin
-  App_Generate(Self);
+  AppController_Generate(Self);
 end;
 
 procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
